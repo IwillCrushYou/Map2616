@@ -1,11 +1,25 @@
 #pragma once
-#include <cstdint>
+#include <stdint.h>
 
-// 15        12 11       8 7        4 3        0
-// [ OPCODE 4b ][ DST REG ][ SRC REG ][ IMMEDIATE ]
-
-// OR for immediate-heavy instructions:
-// [ OPCODE 4b ][ DST REG ][   IMMEDIATE 8 bits   ]
+/*
+ * 16-bit Instruction Format:
+ *
+ * REGISTER FORMAT:
+ * 15      12 11      8 7       4 3       0
+ * [ OPCODE ] [  DST  ] [  SRC  ] [ IMM4  ]
+ *
+ * IMMEDIATE FORMAT:
+ * 15      12 11      8 7                 0
+ * [ OPCODE ] [  DST  ] [   IMMEDIATE 8b ]
+ *
+ * JUMP FORMAT:
+ * 15      12 11                          0
+ * [ OPCODE ] [       ADDRESS 12b        ]
+ *
+ * IMPLIED FORMAT (NOP, HALT):
+ * 15      12 11                          0
+ * [ OPCODE ] [         unused           ]
+ */
 
 #define OPCODE_MASK    0xF000
 #define OPCODE_SHIFT   12
@@ -18,6 +32,7 @@
 
 #define IMM4_MASK      0x000F   // 4-bit immediate
 #define IMM8_MASK      0x00FF   // 8-bit immediate (when src+imm combined)
+#define IMM12_MASK     0x0FFF   // 12-bit 
 
 typedef enum {
     /* Arithmetic */
@@ -52,7 +67,16 @@ typedef enum {
     ADDR_IMMEDIATE,     // operand is a literal value
     ADDR_DIRECT,        // operand is a memory address
     ADDR_INDIRECT,      // operand is a register holding an address
+    ADDR_IMPLIED,
 } AddrMode;
+
+/* ── Instruction Formats ────────────────────────────── */
+typedef enum {
+    FMT_REGISTER,       /* dst, src, imm4                         */
+    FMT_IMMEDIATE,      /* dst, imm8                              */
+    FMT_JUMP,           /* imm12 (address/offset)                 */
+    FMT_IMPLIED,        /* no operands                            */
+} InstrFormat;
 
 typedef struct {
     Opcode   opcode;
@@ -60,6 +84,8 @@ typedef struct {
     uint8_t  src;        // source register index
     uint8_t  immediate;  // immediate value
     AddrMode mode;
+    InstrFormat format;
+    uint8_t valid;
 } Instruction;
 
 #define FLAG_ZERO     (1 << 0)
