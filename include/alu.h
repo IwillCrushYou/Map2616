@@ -1,15 +1,31 @@
 #pragma once
 #include <stdint.h>
-typedef struct {
-    uint16_t result;
-    uint8_t  flags;     /* bits set from FLAG_* defines in isa.h */
-} ALUResult;
+#include "microprocessor.h"
 
-ALUResult alu_add(uint16_t a, uint16_t b);
-ALUResult alu_sub(uint16_t a, uint16_t b);
-ALUResult alu_mul(uint16_t a, uint16_t b);
-ALUResult alu_div(uint16_t a, uint16_t b);
-ALUResult alu_and(uint16_t a, uint16_t b);
-ALUResult alu_or (uint16_t a, uint16_t b);
-ALUResult alu_xor(uint16_t a, uint16_t b);
-ALUResult alu_not(uint16_t a);             /* only one operand */
+/*
+ * Every ALU function:
+ *   - receives operand(s) by value
+ *   - updates cpu->FLAGS
+ *   - returns the 16-bit result
+ *
+ * ADD / SUB set: ZERO, NEGATIVE, CARRY, OVERFLOW
+ * INC / DEC set: ZERO, NEGATIVE
+ * Carry is preserved (8086-style behavior).
+ */
+
+/* ─── arithmetic operations ─────────────────── */
+
+uint16_t alu_add(CPU *cpu, uint16_t a, uint16_t b);
+uint16_t alu_sub(CPU *cpu, uint16_t a, uint16_t b);
+
+/* ─── increment / decrement ─────────────────── */
+
+uint16_t alu_inc(CPU *cpu, uint16_t a);
+uint16_t alu_dec(CPU *cpu, uint16_t a);
+
+/* ─── logical operations ────────────────────── */
+
+uint16_t alu_and(CPU *cpu, uint16_t a, uint16_t b);
+uint16_t alu_or(CPU *cpu, uint16_t a, uint16_t b);
+uint16_t alu_xor(CPU *cpu, uint16_t a, uint16_t b);
+uint16_t alu_not(CPU *cpu, uint16_t a);
