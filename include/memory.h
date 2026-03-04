@@ -1,6 +1,8 @@
 #pragma once
 
+#include <stdint.h>
 #include "microprocessor.h"
+
 
 /* ─── byte access ────────────────────────────── */
 uint8_t  mem_read_byte (const CPU *cpu, uint16_t addr);
