@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include "microprocessor.h"
+#include <stddef.h>
 
 
 /* ─── byte access ────────────────────────────── */
