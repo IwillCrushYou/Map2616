@@ -60,6 +60,10 @@ typedef enum {
     /* Misc */
     OP_NOP  = 0xE,
     OP_HALT = 0xF,
+
+    OP_INC = 0x10,
+    OP_DEC = 0x11,
+
 } Opcode;
 
 typedef enum {
