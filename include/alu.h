@@ -1,6 +1,5 @@
 #pragma once
-#include <stdint.h>
-#include "microprocessor.h"
+#include "CPU.h"
 
 /*
  * Every ALU function:
@@ -13,10 +12,19 @@
  * Carry is preserved (8086-style behavior).
  */
 
+/* flag helpers */
+
+static void flag_set(CPU *cpu, uint8_t flag);
+static void flag_clear(CPU *cpu, uint8_t flag);
+static void flags_zn(CPU *cpu, uint16_t result);
+
 /* ─── arithmetic operations ─────────────────── */
 
 uint16_t alu_add(CPU *cpu, uint16_t a, uint16_t b);
 uint16_t alu_sub(CPU *cpu, uint16_t a, uint16_t b);
+uint16_t alu_mul(CPU *cpu, uint16_t a, uint16_t b);
+uint16_t alu_div(CPU *cpu, uint16_t a, uint16_t b);
+
 
 /* ─── increment / decrement ─────────────────── */
 
@@ -29,3 +37,18 @@ uint16_t alu_and(CPU *cpu, uint16_t a, uint16_t b);
 uint16_t alu_or(CPU *cpu, uint16_t a, uint16_t b);
 uint16_t alu_xor(CPU *cpu, uint16_t a, uint16_t b);
 uint16_t alu_not(CPU *cpu, uint16_t a);
+
+void handle_add(CPU *cpu, Instruction *instr);
+void handle_sub(CPU *cpu, Instruction *instr);
+void handle_mul(CPU *cpu, Instruction *instr);
+void handle_div(CPU *cpu, Instruction *instr);
+
+void handle_and(CPU *cpu, Instruction *instr);
+void handle_or (CPU *cpu, Instruction *instr);
+void handle_xor(CPU *cpu, Instruction *instr);
+void handle_not(CPU *cpu, Instruction *instr);
+
+static inline int flag_is_set(const CPU *cpu, uint8_t flag)
+{
+    return (cpu->FLAGS & flag) != 0;
+}

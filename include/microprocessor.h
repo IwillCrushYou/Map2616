@@ -1,29 +1,12 @@
 #pragma once
-#include <stdint.h>
-#include "isa.h"
-
-/* ─── sizing ─────────────────────────────────── */
-#define MEM_SIZE    65536u
-#define MAX_CYCLES  10000u
-#define PROG_START  0x0000u
-#define NUM_REGS    16
-
-
-/* ─── CPU struct ─────────────────────────────── */
-typedef struct {
-    uint32_t cycles;             /* instructions executed      */
-    uint16_t regs[NUM_REGS];  /* R0–R15 registers */
-    uint16_t PC;                 /* instruction pointer        */
-    uint8_t  FLAGS;              /* Z[0]  C[1]  S[2]           */
-    uint8_t  memory[MEM_SIZE];   /* 64 KB flat RAM             */
-    uint8_t  halted;             /* 1 after HLT / bad opcode   */
-    uint8_t  last_opcode;        /* opcode of last instruction */
-} CPU;
+#include "errors.h"
+#include "alu.h"
+#include "memory.h"
 
 /* ─── lifecycle ──────────────────────────────── */
 void     cpu_init (CPU *cpu);          /* zero everything            */
 void     cpu_reset(CPU *cpu);          /* clear regs, keep memory    */
-
+void     cpu_load  (CPU *cpu, uint16_t addr, uint8_t *program, uint16_t size);
 
 
 /* ─── fetch-decode-execute ───────────────────── */
