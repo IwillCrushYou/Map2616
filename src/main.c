@@ -1,21 +1,22 @@
 #include <stdio.h>
 #include "microprocessor.h"
+#include "assembler.h"
 
-int main()
+int main(int argc,char **argv)
 {
+    if(argc < 2)
+    {
+        printf("Usage: %s program.txt\n",argv[0]);
+        return 1;
+    }
+
     CPU cpu;
+
     cpu_init(&cpu);
 
-    uint16_t program[] = {
-        cpu_encode(OP_MOV, 1, 0, 5),   // R1 = 5
-        cpu_encode(OP_MOV, 2, 0, 3),   // R2 = 3
-        cpu_encode(OP_ADD, 1, 2, 0),   // R1 = R1 + R2
-        cpu_encode(OP_HALT,0,0,0)
-    };
+    load_program_text(&cpu,argv[1]);
 
-    mem_load_program(&cpu, program, 4);
-
-    cpu_run(&cpu, 1);
+    cpu_run(&cpu,1);
 
     return 0;
 }
