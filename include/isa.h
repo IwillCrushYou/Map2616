@@ -92,7 +92,12 @@ typedef struct {
     uint8_t valid;
 } Instruction;
 
-#define FLAG_ZERO     (1 << 0)
-#define FLAG_NEGATIVE (1 << 1)
-#define FLAG_CARRY    (1 << 2)
-#define FLAG_OVERFLOW (1 << 3)
+#define FLAG_ZERO      (1 << 0)
+#define FLAG_SIGN      (1 << 1)
+#define FLAG_CARRY     (1 << 2)
+#define FLAG_OVERFLOW  (1 << 3)
+#define FLAG_AUX_CARRY (1 << 4)
+#define FLAG_PARITY    (1 << 5)
+#define FLAG_TRAP      (1 << 6)
+#define FLAG_INTERRUPT (1 << 7)
+#define FLAG_DIRECTION (1 << 8)

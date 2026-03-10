@@ -14,6 +14,6 @@ void handle_jz(CPU *cpu, Instruction *instr) {
 
 void handle_jn(CPU *cpu, Instruction *instr) {
     /* Jump if NEGATIVE flag is set */
-    if (flag_is_set(cpu, FLAG_NEGATIVE))
+    if (flag_is_set(cpu, FLAG_SIGN))
         cpu->PC = instr->immediate;
 }

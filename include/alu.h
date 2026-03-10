@@ -14,8 +14,8 @@
 
 /* flag helpers */
 
-static void flag_set(CPU *cpu, uint8_t flag);
-static void flag_clear(CPU *cpu, uint8_t flag);
+static void flag_set(CPU *cpu, uint16_t flag);
+static void flag_clear(CPU *cpu, uint16_t flag);
 static void flags_zn(CPU *cpu, uint16_t result);
 
 /* ─── arithmetic operations ─────────────────── */
@@ -48,7 +48,6 @@ void handle_or (CPU *cpu, Instruction *instr);
 void handle_xor(CPU *cpu, Instruction *instr);
 void handle_not(CPU *cpu, Instruction *instr);
 
-static inline int flag_is_set(const CPU *cpu, uint8_t flag)
-{
+static inline int flag_is_set(const CPU *cpu, uint16_t flag){
     return (cpu->FLAGS & flag) != 0;
 }
