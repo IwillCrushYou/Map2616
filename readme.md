@@ -83,3 +83,32 @@ The frontend communicates with the WebAssembly module using the **Emscripten vir
 ---
 
 # Project Structure
+
+Map2616/
+│
+├── src/ # emulator implementation
+├── include/ # header files
+├── frontend/ # React frontend
+├── build/ # native build
+├── build-wasm/ # WebAssembly build
+├── CMakeLists.txt
+└── README.md
+
+
+---
+
+# Running the Project
+
+## Native Build (Linux)
+
+```bash
+git clone https://github.com/IwillCrushYou/Map2616
+cd Map2616
+
+mkdir build
+cd build
+
+cmake ..
+make
+
+./main /path/to/program.txt/file
