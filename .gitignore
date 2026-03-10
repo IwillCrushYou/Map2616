@@ -1,2 +1,6 @@
 /build
 build.txt
+/build-wasm
+/frontend/client/src/wasm
+
+
