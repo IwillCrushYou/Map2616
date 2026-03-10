@@ -11,7 +11,7 @@ typedef struct {
     uint32_t cycles;             /* instructions executed      */
     uint16_t regs[NUM_REGS];     /* R0–R15 registers */
     uint16_t PC;                 /* instruction pointer        */
-    uint8_t  FLAGS;              /* Z[0]  C[1]  S[2]           */
+    uint16_t FLAGS;              /* Z[0]  C[1]  S[2]           */
     uint8_t  memory[MEM_SIZE];   /* 64 KB flat RAM             */
     uint8_t  halted;             /* 1 after HLT / bad opcode   */
     uint8_t  last_opcode;        /* opcode of last instruction */

@@ -47,7 +47,7 @@ static void print_step(CPU *cpu, uint16_t raw, Instruction *instr) {
            instr->immediate,
            flag_is_set(cpu, FLAG_ZERO)     ? 'Z' : '-',
            flag_is_set(cpu, FLAG_CARRY)    ? 'C' : '-',
-           flag_is_set(cpu, FLAG_NEGATIVE) ? 'N' : '-',
+           flag_is_set(cpu, FLAG_SIGN) ? 'N' : '-',
            flag_is_set(cpu, FLAG_OVERFLOW) ? 'V' : '-');
 }
 

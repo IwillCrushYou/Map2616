@@ -4,11 +4,11 @@
  * INTERNAL FLAG HELPERS
  * ═══════════════════════════════════════════════════════════════ */
 
-static void flag_set(CPU *cpu, uint8_t flag) {
+static void flag_set(CPU *cpu, uint16_t flag) {
     cpu->FLAGS |= flag;
 }
 
-static void flag_clear(CPU *cpu, uint8_t flag) {
+static void flag_clear(CPU *cpu, uint16_t flag) {
     cpu->FLAGS &= ~flag;
 }
 
@@ -20,9 +20,9 @@ static void flags_zn(CPU *cpu, uint16_t result) {
         flag_clear(cpu, FLAG_ZERO);
 
     if (result & 0x8000)
-        flag_set(cpu, FLAG_NEGATIVE);
+        flag_set(cpu, FLAG_SIGN);
     else
-        flag_clear(cpu, FLAG_NEGATIVE);
+        flag_clear(cpu, FLAG_SIGN);
 }
 
 
@@ -33,6 +33,10 @@ static void flags_zn(CPU *cpu, uint16_t result) {
 uint16_t alu_add(CPU *cpu, uint16_t a, uint16_t b) {
     uint32_t full   = (uint32_t)a + (uint32_t)b;
     uint16_t result = (uint16_t)full;
+
+    // check parity by lower byte
+    if(__builtin_popcount((uint8_t)result)%2==0) flag_set(cpu,FLAG_PARITY);
+    else flag_clear(cpu, FLAG_PARITY);
 
     /* CARRY: result spilled past 16 bits */
     if (full > 0xFFFF)
@@ -76,6 +80,10 @@ uint16_t alu_sub(CPU *cpu, uint16_t a, uint16_t b) {
     else
         flag_clear(cpu, FLAG_OVERFLOW);
 
+    // parity flag    
+    if(__builtin_popcount((uint8_t)result)%2==0) flag_set(cpu,FLAG_PARITY);
+    else flag_clear(cpu, FLAG_PARITY);
+
     flags_zn(cpu, result);
     return result;
 }
@@ -87,6 +95,9 @@ uint16_t alu_mul(CPU *cpu, uint16_t a, uint16_t b) {
     /* MUL does not produce CARRY or OVERFLOW in this ISA */
     flag_clear(cpu, FLAG_CARRY);
     flag_clear(cpu, FLAG_OVERFLOW);
+
+    if(__builtin_popcount((uint8_t)result)%2==0) flag_set(cpu,FLAG_PARITY);
+    else flag_clear(cpu, FLAG_PARITY);
 
     flags_zn(cpu, result);
     return result;
@@ -104,7 +115,8 @@ uint16_t alu_div(CPU *cpu, uint16_t a, uint16_t b) {
 
     flag_clear(cpu, FLAG_CARRY);
     flag_clear(cpu, FLAG_OVERFLOW);
-
+    if(__builtin_popcount((uint8_t)result)%2==0) flag_set(cpu,FLAG_PARITY);
+    else flag_clear(cpu, FLAG_PARITY);
     flags_zn(cpu, result);
     return result;
 }
