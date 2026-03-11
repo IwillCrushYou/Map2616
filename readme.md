@@ -3,6 +3,9 @@
 A custom **16-bit microprocessor emulator and assembler written in C**, capable of executing assembly programs through a fully simulated CPU architecture. The same C codebase runs natively on Linux, as WebAssembly in Node.js, and inside a browser via a React frontend.
 
 ---
+## Live Demo
+[Visit Website](https://microprocessor-emulator.netlify.app/)
+
 
 ## Table of Contents
 
